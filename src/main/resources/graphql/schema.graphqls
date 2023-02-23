@@ -1,0 +1,46 @@
+type Query {
+    sales(request: GetSalesRequestEntity!): [SalesItem]!
+}
+
+type Mutation {
+    makePayment(payment: PaymentDetailsRequestEntity!): PaymentResponse!
+}
+
+input PaymentDetailsRequestEntity {
+    price: String!
+    priceModifier: Float!
+    paymentMethod: PaymentMode!
+    dateTime: String!
+}
+
+type PaymentResponse {
+    finalPrice: String
+    points: Float
+}
+
+enum PaymentMode {
+    CASH
+    CASH_ON_DELIVERY
+    VISA
+    MASTERCARD
+    AMEX
+    JCB
+}
+
+input GetSalesRequestEntity {
+    startDateTime: String!
+    endDateTime: String!
+}
+
+type Sales {
+    sales: [SalesItem]!
+}
+
+type SalesItem {
+    dateTime: String!
+    sales: String!
+    points: Float!
+}
+
+
+

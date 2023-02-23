@@ -1,0 +1,24 @@
+http://localhost:8080/graphiql?path=/graphql
+
+mutation {
+  makePayment(payment: {
+    price: "234.00",
+    priceModifier: 0.90,
+    paymentMethod: VISA,
+    dateTime: "2022-10-01T15:45:43Z"
+  }) {
+    finalPrice,
+    points
+  }
+}
+
+query {
+  sales(request: {
+    startDateTime: "2022-09-01T00:00:00Z",
+    endDateTime: "2022-09-01T23:59:59Z"
+  }) {
+    dateTime,
+    sales,
+    points
+  }
+}
