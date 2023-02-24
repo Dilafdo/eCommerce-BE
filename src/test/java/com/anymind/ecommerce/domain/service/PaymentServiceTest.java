@@ -6,6 +6,7 @@ import com.anymind.ecommerce.application.responseEntity.PaymentResponse;
 import com.anymind.ecommerce.application.responseEntity.SalesItem;
 import com.anymind.ecommerce.domain.entity.PaymentDetails;
 import com.anymind.ecommerce.domain.entity.PaymentMethod;
+import com.anymind.ecommerce.domain.error.InvalidDateFormatException;
 import com.anymind.ecommerce.external.repository.PaymentDetailsRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
@@ -69,6 +71,13 @@ public class PaymentServiceTest {
         LocalDateTime localDateTime = service.convertToLocalDateTime(dateTime);
 
         assertEquals(LocalDateTime.parse("2022-01-01T12:00:00"), localDateTime);
+    }
+
+    @Test
+    public void testConvertToLocalDateTimeInvalidFormat() {
+        String dateTime = "2022-01-01T12:00:00";
+
+        assertThrows(InvalidDateFormatException.class, () -> service.convertToLocalDateTime(dateTime));
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.anymind.ecommerce.application.responseEntity.PaymentResponse;
 import com.anymind.ecommerce.application.responseEntity.SalesItem;
 import com.anymind.ecommerce.domain.entity.PaymentDetails;
 import com.anymind.ecommerce.domain.entity.PaymentMethod;
+import com.anymind.ecommerce.domain.error.InvalidDateFormatException;
 import com.anymind.ecommerce.external.repository.PaymentDetailsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
@@ -76,7 +78,11 @@ public class PaymentService {
     protected LocalDateTime convertToLocalDateTime(String dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
         String dateTimeWithoutZ = dateTime.substring(0, dateTime.length() - 1);
-        return LocalDateTime.parse(dateTimeWithoutZ, formatter);
+        try {
+            return LocalDateTime.parse(dateTimeWithoutZ, formatter);
+        } catch (DateTimeParseException err) {
+            throw new InvalidDateFormatException("Invalid date time format! Expected format: yyyy-mm-ddThh:mm:ssZ", dateTime);
+        }
     }
 
     protected Float roundToTwoFloatingPoints(Float number) {
